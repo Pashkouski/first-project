@@ -1,4 +1,7 @@
 document.addEventListener("DOMContentLoaded", () => {
+
+    //Tabs
+
     const tabs = document.querySelectorAll('.tabheader__item'), // пункт меню
         tabsContent = document.querySelectorAll('.tabcontent'), //фото на странице
         tabsParent = document.querySelector('.tabheader__items'); //полное меню
@@ -36,4 +39,56 @@ document.addEventListener("DOMContentLoaded", () => {
         }
 
     });
+
+    // Timer
+    const deadline = "2022-12-05";
+
+    function getTineRemaining(endTime) {
+        const t = Date.parse(endTime) - new Date(),
+              days = Math.floor( t / 1000 / 60 / 60 / 24),
+              hours = Math.floor((t / 1000 / 60 / 60) % 24),
+              minutes = Math.floor((t / 1000 / 60) % 60),
+              second = Math.floor((t / 1000) % 60);
+        return {
+              "total": t,
+              "days": days,
+              "hours": hours,
+              "minutes": minutes,
+              "second": second
+        };
+    }
+
+    function getZerro(num) {
+        if(num >= 0 && num < 10) {
+            return `0${num}`;
+        } else
+            return num;
+    }
+
+    function setCloak(selector, endTime) {
+        const timer = document.querySelector(selector),
+            days = timer.querySelector('#days'),
+            hours = timer.querySelector('#hours'),
+            minutes = timer.querySelector('#minutes'),
+            second = timer.querySelector('#seconds'),
+            timeInterval = setInterval(updateCloak, 1000);
+
+        updateCloak();
+
+        function updateCloak() {
+            let t = getTineRemaining(endTime);
+
+            days.innerHTML = getZerro(t.days);
+            hours.innerHTML = getZerro(t.hours);
+            minutes.innerHTML = getZerro(t.minutes);
+            second.innerHTML = getZerro(t.second);
+
+            if(t.total <= 0) {
+                clearInterval(timeInterval);
+             }
+        }
+    }
+
+    setCloak(".timer", deadline);
+
 });
